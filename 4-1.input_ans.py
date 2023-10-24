@@ -37,6 +37,7 @@ options = st.multiselect('좋아하는 색을 모두 선택하세요',
          ['Green', 'Yellow', 'Red', 'Blue'],
          ['Yellow', 'Red'])
 st.write('선호 색상:')
+# st.write('선호 색상: '+ ', '.join(options)) # 사이사이에 콤마를 찍겠다. # multiselect를 가로로 보기
 for i in options: 
     st.write(i)
 

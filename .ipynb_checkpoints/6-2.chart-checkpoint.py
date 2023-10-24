@@ -9,17 +9,16 @@ st.header('Unit 3. Streamlit Simple chart')
 
 #### https://raw.githubusercontent.com/huhshin/streamlit/master/data_sales.csv 읽고 확인하기
 
-# chart_data = 
-# st.
+chart_data = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_sales.csv', encoding = 'CP949')
 
 st.subheader('3-1. Simple Line chart') 
-# st.ss
+st.line_chart(chart_data)
 
 st.subheader('3-2. Simple Bar chart')
-# st.
+st.bar_chart(chart_data)
 
 st.subheader('3-3. Simple area chart')
-# st.
+st.area_chart(chart_data)
 
 st.header('Unit 4. Altair chart') 
 #### https://raw.githubusercontent.com/huhshin/streamlit/master/data_retail.csv 읽고 
@@ -82,7 +81,7 @@ st.header('Unit 5. Plotly chart')
 
 #### https://raw.githubusercontent.com/huhshin/streamlit/master/data_medal.csv 읽고 확인하기
 
-medal = 
+medal = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_medal.csv', encoding = 'CP949')
 st.d
     
 
