@@ -16,7 +16,8 @@ map_data = pd.DataFrame({
 # map_data['lat'].mean()과 map_data['lon'].mean(): 평균 위도와 경도 위치를 지도 중심으로 설정
 # zoom_start: 이 매개변수는 지도의 초기 확대 수준 (default=10, 숫자가 클수록 확대)
 
-my_map = folium.Map( location=[map_data['lat'].mean(), map_data['lon'].mean()], zoom_start=2 )
+# my_map = folium.Map( location=[map_data['lat'].mean(), map_data['lon'].mean()], zoom_start=2 )
+my_map = folium.Map( location=[map_data['lat'].mean(), map_data['lon'].mean()+30], zoom_start=2 )
 
 
 # 지도에 원형 마커와 값 추가
