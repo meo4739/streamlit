@@ -32,7 +32,7 @@ df_melted = pd.melt(df, id_vars=['date'], var_name='teams', value_name='sales')
 #### columns 함수를 이용하여 좌-원본 데이터, 우-변환 데이터 확인하기
 
 # col1, 
-# with 
+# with 11111
 #     st.text('원본 데이터')
     
 # with 
