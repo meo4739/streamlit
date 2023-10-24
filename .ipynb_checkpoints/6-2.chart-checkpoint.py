@@ -26,83 +26,76 @@ st.header('Unit 4. Altair chart')
 #### identifier(x)-'date', unpivot column(범례,color)-'teams’, value column(y)-'sales'
 #### id_vars=['date'], var_name='teams', value_name='sales'
 
-df = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_retail.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_retail.csv') # 데이터 준비
 df_melted = pd.melt(df, id_vars=['date'], var_name='teams', value_name='sales')
 
 #### columns 함수를 이용하여 좌-원본 데이터, 우-변환 데이터 확인하기
 
 # col1, 
-# with 11111
+# with 
 #     st.text('원본 데이터')
     
 # with 
 #     st.text('변경 데이터')
-
     
 st.subheader('4-1. Altair Line chart')
 
-# chart = alt.Chart(
+chart = alt.Chart(df_melted, title = '일별 팀 매출 비교').mark_line().encode(
+    x='date', y='sales', color='teams', strokeDash='teams').properties(width=650, height=350)
     
-
-# st.( ,use_container_width=True)   # use_container_width=True 가로로 화면에 채워 줌
-
+st.altair_chart(chart,use_container_width=True)   # use_container_width=True 가로로 화면에 채워 줌
 
 st.subheader('4-2. Altair Bar chart')
 
-# chart = alt.Chart(
+chart = alt.Chart(df_melted, title = '일별 매출').mark_bar().encode(
+    x='date', y='sales', color= 'teams')
     
-    
-# text = alt.Chart(
+text = alt.Chart(df_melted).mark_text(dx=0, dy=0, color = 'black').encode(
+    x='date', y='sales', detail = 'teams', text = alt.Text('sales:Q'))
 
-    
-
-# st.()  # use_container_width=True 가로로 화면에 채워 줌
-    
+st.altair_chart(chart + text, use_container_width = True)  # use_container_width=True 가로로 화면에 채워 줌
     
 st.subheader('4-3. Altair Scatter chart')
 #### https://raw.githubusercontent.com/huhshin/streamlit/master/data_iris.csv 읽고 확인하기
 
-# iris = 
-# st.
+iris = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_iris.csv ', encoding = 'CP949')
+st.write(iris)
 
 #### caption으로 'sepal:꽃받침, petal:꽃잎' 설명 출력하기 
 
-# st.
+st.caption('sepal:꽃받침, petal:꽃잎')
 
 #### petal_length, petal_width로 Altair Circle chart 그리기
 
-# chart = 
+chart = alt.Chart(iris).mark_circle().encode(
+            x = 'petal_length', y = 'petal_width', color = 'species')
 
-
-# st.()  # use_container_width=True 가로로 화면에 채워 줌
+st.altair_chart(chart,use_container_width=True)  # use_container_width=True 가로로 화면에 채워 줌
 
 
 st.header('Unit 5. Plotly chart')
 
 #### https://raw.githubusercontent.com/huhshin/streamlit/master/data_medal.csv 읽고 확인하기
 
-medal = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_medal.csv', encoding = 'CP949')
-st.d
+medal = pd.read_csv('https://raw.githubusercontent.com/huhshin/streamlit/master/data_medal.csv')
     
-
 st.subheader('5-1. Plotly Pie/Donut chart') 
 
-# fig = 
-
-# fig.
-# fig.
-# # fig.update(layout_showlegend=False)  # 범례 표시 제거
-# st.
+fig = px.pie(medal, names = 'nation', values = 'gold', title = '올림픽 양궁 금메달 현황', hole = .3)
+fig.update_traces(textposition = 'inside', textinfo = 'percent+label+value')
+fig.update_layout(font = dict(size = 14))
+fig.update(layout_showlegend=False)  # 범례 표시 제거
+st.plotly_chart(fig)
 
 
 st.subheader('5-2. Plotly Bar chart')
-#### text_auto=True 값 표시 여부
+### text_auto=True 값 표시 여부
 
-# fig = 
+fig = px.bar(medal, x = 'nation', y = ['gold','silver','bronze'], text_auto = True,title = '올림픽 양궁 금메달 현황')
                                     # text_auto=True 값 표시 여부
-# fig.                              # 그래프 크기 조절   
-# # fig.update_traces(textangle=0)    # 그래프 안의 텍스트가 바로 쓰여지게 설정
-# st.
+fig.update_layout(width = 800, height = 600)                              # 그래프 크기 조절   
+fig.update_traces(textangle=0)    # 그래프 안의 텍스트가 바로 쓰여지게 설정
+st.plotly_chart(fig)
 
 
 # 파일실행: File > New > Terminal(anaconda prompt) - streamlit run streamlit\6-2.chart.py
