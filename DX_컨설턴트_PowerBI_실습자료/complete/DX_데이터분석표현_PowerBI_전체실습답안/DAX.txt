@@ -1,0 +1,97 @@
+실습 3-5. 계층구조 만들기③ : 지역(지도)
+
+- 새 열 만들기
+Addr3 = [Addr1] & " " & [Addr2]
+
+
+실습 4-1. 날짜 테이블과 기본 측정값 만들기
+
+- 날짜 테이블 만들기
+D_Dates = CALENDAR( MIN(F_Sales[OrderDate]), MAX(F_Sales[OrderDate]) )
+
+- 날짜 테이블에 새 열 추가하기
+Year = YEAR( D_Dates[Date] )
+Quarter = QUARTER( D_Dates[Date] )
+Month = MONTH( D_Dates[Date] )
+WeekNum = WEEKNUM( D_Dates[Date] )
+Day = DAY( D_Dates[Date] )
+
+- F_Sales 테이블에 새 열 만들기
+판매가 = DIVIDE(F_Sales[Amt], F_Sales[Qty])
+
+- 새 측정값 만들기
+총매출액 = SUM(F_Sales[Amt])
+
+
+실습 4-2. 이전 날짜
+
+총매출액_전년 = CALCULATE( [총매출액], DATEADD(D_Dates[Date], -1, YEAR) )
+총매출액_전분기 = CALCULATE( [총매출액], DATEADD(D_Dates[Date], -1, QUARTER) )
+총매출액_전월 = CALCULATE( [총매출액], DATEADD(D_Dates[Date], -1, MONTH) 
+
+
+실습 4-3 기간 누적
+
+총매출액YTD = TOTALYTD([총매출액], D_Dates[Date])
+총매출액QTD = TOTALQTD([총매출액],D_Dates[Date])
+총매출액MTD = TOTALMTD([총매출액],D_Dates[Date])
+
+
+실습 4-4. 과거 기간 누적
+
+총매출액YTD_전년 = CALCULATE( [총매출액YTD], DATEADD(D_Dates[Date], -1, YEAR) )
+총매출액QTD_전분기 = CALCULATE( [총매출액QTD], DATEADD(D_Dates[Date], -1, QUARTER) )
+총매출액MTD_전월 = CALCULATE( [총매출액MTD], DATEADD(D_Dates[Date], -1, MONTH) )
+
+
+실습 4-5. 과거 대비 변화
+
+총매출성장액 = [총매출액] - [총매출액_전년]
+%총매출액YoY = DIVIDE(  ( [총매출액]-[총매출액_전년] ), [총매출액_전년]  )
+%총매출액QoQ = DIVIDE(  ( [총매출액]-[총매출액_전분기] ), [총매출액_전분기]  )
+%총매출액MoM = DIVIDE(  ( [총매출액]-[총매출액_전월] ), [총매출액_전월]  )
+
+
+실습 4-6. 이동 평균(롤링 평균)
+
+총매출액3M평균 = AVERAGEX( 
+                       DATESINPERIOD( D_Dates[Date],LASTDATE(D_Dates[Date]), -3, MONTH), 
+                                                   [총매출액]  )
+
+
+5. 종합실습
+
+- 날짜 테이블 만들기
+D_Dates = CALENDAR( MIN(F_Sales[주문일]), MAX(F_Sales[주문일]) )
+
+- 날짜 D_Dates 테이블에 새 열로 연, 분기, 월 , 주, 일 추가하기
+연 = YEAR( D_Dates[Date] )
+분기 = QUARTER( D_Dates[Date] )
+월 = MONTH( D_Dates[Date] )
+주 = WEEKNUM( D_Dates[Date] )
+일 = DAY( D_Dates[Date] )
+
+- 측정값 만들기
+총매출 = SUM( F_Sales[주문금액] )
+총매출(전년) = CALCULATE( [총매출], SAMEPERIODLASTYEAR(D_Dates[Date] ) )
+총비용 = SUM( F_Sales[비용] )
+총수익 = [총매출] - [총비용]
+%수익률 = DIVIDE([총수익], [총매출])
+기간총매출 = CALCULATE( [총매출],
+                        FILTER(  ALLSELECTED(D_Dates), D_Dates[Date] <= MAX(D_Dates[Date] ) ) )
+기간총매출(전년) = CALCULATE( [총매출(전년)],
+                  FILTER( ALLSELECTED( D_Dates ), D_Dates[Date] <= MAX(D_Dates[Date] ) ) )
+
+- D_Customer 테이블에 새 열 추가
+매출합계 = [총매출]
+
+매출누계 = CALCULATE( [총매출], 
+                   ALL(D_Customers),
+                   D_Customers[매출합계] >= EARLIER( D_Customers[매출합계]) )
+
+매출누계비율 = DIVIDE( D_Customers[매출누계], SUM(D_Customers[매출합계]) )
+
+고객등급 = SWITCH( TRUE(),
+                    D_Customers[매출누계비율] <= 0.3 , "A",
+                    D_Customers[매출누계비율] <= 0.6 , "B",
+                    "C")
